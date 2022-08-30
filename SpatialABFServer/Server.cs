@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace SpatialABFServer
@@ -15,6 +17,9 @@ namespace SpatialABFServer
         private Thread listenThread;
         private List<Client> clients = new List<Client>();
 
+        public event EventHandler<AccelerometerReading> DataReceived;
+        public event EventHandler ReceivingData;
+
         public Server(int pPort)
         {
             port = pPort;
@@ -25,6 +30,7 @@ namespace SpatialABFServer
 
             Client client = (Client)clientObj;
 
+            ReceivingData?.Invoke(this, EventArgs.Empty);
             Console.WriteLine(client.IP + " has connected");
 
             byte[] buffer;
@@ -49,12 +55,17 @@ namespace SpatialABFServer
                     break;
                 }
                 ASCIIEncoding encoder = new ASCIIEncoding();
-                Console.Write("Message received from  - " + client.IP + " : ");
                 string incomingMsg = encoder.GetString(message, 0, bytesRead);
-                Console.WriteLine(incomingMsg);
 
-                buffer = encoder.GetBytes("Hello Client!");
-                client.ClientStream.Write(buffer, 0, buffer.Length);
+                JsonNode dataNode = JsonNode.Parse(incomingMsg)!;
+
+
+                AccelerometerReading accelerometerReading = new AccelerometerReading(dataNode["X"].ToString(), dataNode["Y"].ToString(), dataNode["Z"].ToString(), dataNode["Time"].ToString());
+
+                EventArgs e = new EventArgs();
+
+                DataReceived?.Invoke(this, accelerometerReading);
+
                 client.ClientStream.Flush();
             }
             clients.Remove(client);

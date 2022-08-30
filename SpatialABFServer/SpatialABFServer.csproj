@@ -8,7 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CSCore" Version="1.2.1.2" />
     <PackageReference Include="NAudio" Version="2.1.0" />
+    <PackageReference Include="VisioForge.DotNet.Core.TRIAL" Version="15.1.12" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="irrKlang.NET4">
+      <HintPath>bin\irrKlang.NET4.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
