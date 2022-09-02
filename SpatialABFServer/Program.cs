@@ -12,6 +12,7 @@ class Program
     //static generator and loggers
     static SoundGenerator soundGenerator = new SoundGenerator();
     static DataLogger dataLogger;
+    static Server server;
 
     static void Main(string[] args)
     {
@@ -21,7 +22,7 @@ class Program
 
         if (Int32.TryParse(Console.ReadLine(), out port) && TestPortNumber(port))
         {
-            Server server = new Server(port);
+            server = new Server(port);
             server.ReceivingData += ClientConnected;
             server.DataReceived += AccelDataReceived;
 
