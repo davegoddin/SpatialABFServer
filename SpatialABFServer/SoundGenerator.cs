@@ -26,6 +26,7 @@ namespace SpatialABFServer
             // set listener to 0,0,0 and facing forward (0,0,1)
             engine.SetListenerPosition(new Vector3D(0, 0, 0), new Vector3D(0, 0, 1));
             audio.MinDistance = 5f;
+            Mute();
         }
 
         public void SetAudioSourceLocation(float x, float z)
@@ -35,8 +36,9 @@ namespace SpatialABFServer
             Console.WriteLine(audioSourceLocation);
         }
 
-        public void PlayAudio()
+        public void PlayAudioAtCurrentSource()
         {
+            Unmute();
             while (true)
             {
                 audio.Position = audioSourceLocation;
@@ -44,6 +46,15 @@ namespace SpatialABFServer
             }
         }
 
+        public void Mute()
+        {
+            audio.Volume = 0f;
+        }
+
+        public void Unmute()
+        {
+            audio.Volume = 1f;
+        }
         
     }
 }

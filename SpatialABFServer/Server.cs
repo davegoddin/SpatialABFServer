@@ -27,9 +27,10 @@ namespace SpatialABFServer
 
         void HandleClientComm(object clientObj)
         {
-
+            
             Client client = (Client)clientObj;
 
+            // trigger initial receiving data event
             ReceivingData?.Invoke(this, EventArgs.Empty);
             Console.WriteLine(client.IP + " has connected");
 
@@ -39,6 +40,7 @@ namespace SpatialABFServer
 
             while (true)
             {
+                // read data from client data stream
                 bytesRead = 0;
                 try
                 {
@@ -57,14 +59,24 @@ namespace SpatialABFServer
                 ASCIIEncoding encoder = new ASCIIEncoding();
                 string incomingMsg = encoder.GetString(message, 0, bytesRead);
 
-                JsonNode dataNode = JsonNode.Parse(incomingMsg)!;
+                
 
+                try
+                {
+                    // parse JSON and convert to 
+                    JsonNode dataNode = JsonNode.Parse(incomingMsg)!;
+                    AccelerometerReading accelerometerReading = new AccelerometerReading(dataNode["X"].ToString(), dataNode["Y"].ToString(), dataNode["Z"].ToString(), dataNode["Time"].ToString());
+                    // trigger data received event, pass accelerometer reading object
+                    DataReceived?.Invoke(this, accelerometerReading);
+                }
+                catch (Exception ex)
+                {
+                    continue;
+                }
 
-                AccelerometerReading accelerometerReading = new AccelerometerReading(dataNode["X"].ToString(), dataNode["Y"].ToString(), dataNode["Z"].ToString(), dataNode["Time"].ToString());
+                
 
-                EventArgs e = new EventArgs();
-
-                DataReceived?.Invoke(this, accelerometerReading);
+                
 
                 client.ClientStream.Flush();
             }
