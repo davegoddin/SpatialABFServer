@@ -20,5 +20,10 @@ namespace SpatialABFServer
             Z = float.Parse(z);
             Time = long.Parse(time);
         }
+
+        public string ToCSVRow()
+        {
+            return $"{X},{Y},{Z},{Time}";
+        }
     }
 }
