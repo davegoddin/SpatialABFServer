@@ -19,8 +19,6 @@ namespace SpatialABFServer
 
         Vector3D audioSourceLocation = new Vector3D(0,0,0);
 
-        bool playing = false;
-
         public SoundGenerator()
         {
             // initialise audio source to 0,0,0 and play looped
@@ -35,13 +33,12 @@ namespace SpatialABFServer
         {
             
             audioSourceLocation = new Vector3D(-RADIUS*x, 0, RADIUS*z);
-            Console.WriteLine(audioSourceLocation);
+            //Console.WriteLine(audioSourceLocation);
         }
 
         public void PlayAudioAtCurrentSource()
         {
-            playing = true;
-            while (playing)
+            while (true)
             {
                 audio.Position = audioSourceLocation;
                 Thread.Sleep(100);
@@ -60,7 +57,6 @@ namespace SpatialABFServer
         
         public void Stop()
         {
-            playing = false;
             audio.Stop();
         }
     }

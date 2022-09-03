@@ -18,6 +18,8 @@ namespace SpatialABFServer
 
         public void Run()
         {
+            Console.WriteLine("Started Localisation Routine");
+
             StimulusGenerator stimulusGenerator = new StimulusGenerator();
             // generate angles, evenly divided across quadrants
             Queue<int> testAngles = stimulusGenerator.GenerateTestAngles(3);
@@ -26,12 +28,13 @@ namespace SpatialABFServer
             Console.WriteLine("Enter filename:");
             string fileName = Console.ReadLine();
 
-            DataLogger logger = new DataLogger(1, 12, fileName);
+            DataLogger logger = new DataLogger(1, 13, fileName);
 
-            _soundGenerator.PlayAudioAtCurrentSource();
             while (testAngles.Count > 0)
             {
+                
                 int currentAngle = testAngles.Dequeue();
+                
 
                 Vector3D sourceVector = GeometryHelper.AngleToVector3D(GeometryHelper.DegToRad(currentAngle), 5f);
 
@@ -40,7 +43,7 @@ namespace SpatialABFServer
                 Thread.Sleep(5000);
                 _soundGenerator.Mute();
 
-                Console.WriteLine($"{currentAngle} - enter measured angle: ");
+                Console.WriteLine($"Test angle {12 - testAngles.Count}: enter measured angle");
                 string measuredAngle = Console.ReadLine();
                 logger.LogReading($"{currentAngle},{measuredAngle}");
             }

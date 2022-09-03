@@ -26,6 +26,7 @@ namespace SpatialABFServer
 
         public void Run()
         {
+            Console.WriteLine("Started Exercise Routine");
             StimulusGenerator stimulusGenerator = new StimulusGenerator();
             // generate angles, evenly divided across quadrants
             Queue<int> testAngles = stimulusGenerator.GenerateTestAngles(3);
@@ -35,8 +36,6 @@ namespace SpatialABFServer
             string fileName = Console.ReadLine();
 
             logger = new DataLogger(3, 30, fileName);
-
-            _soundGenerator.PlayAudioAtCurrentSource();
             while (testAngles.Count > 0)
             {
                 
@@ -48,14 +47,18 @@ namespace SpatialABFServer
                 _soundGenerator.SetAudioSourceLocation(sourceVector.X, sourceVector.Z);
                 _soundGenerator.Unmute();
                 trialActive = true;
-                Thread.Sleep(7000);
-                //insert audio cue code for return
-
+                recentre = false;
+                Console.WriteLine("Press any key to start recentring");
+                Console.ReadKey();
                 recentre = true;
                 logger.LogReading($"Stimulus {stimulusNumber} - {currentAngle} - recentre");
                 Console.WriteLine("Press any key to end recentring");
                 Console.ReadKey();
+
                 trialActive = false;
+                recentre = false;
+                _soundGenerator.Mute();
+
                 Console.WriteLine($"\nPress any key to continue");
                 Console.ReadKey();
             }
@@ -69,7 +72,7 @@ namespace SpatialABFServer
 
             if (recentre)
             {
-                _soundGenerator.SetAudioSourceLocation(data.X, data.Z);
+                _soundGenerator.SetAudioSourceLocation(-data.X, -data.Z);
             }
             if (trialActive)
             {

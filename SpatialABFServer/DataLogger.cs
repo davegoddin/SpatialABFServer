@@ -33,7 +33,11 @@ namespace SpatialABFServer
 
         private async void WriteBufferToFile(List<string> buffer)
         {
-            await File.WriteAllLinesAsync(_outputFile, buffer);
+            using StreamWriter file = new(_outputFile, append: true);
+            foreach (string line in buffer)
+            {
+                await file.WriteLineAsync(line);
+            }
             buffer.Clear();
         }
 
