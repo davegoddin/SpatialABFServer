@@ -43,7 +43,7 @@ namespace SpatialABFServer
                 int stimulusNumber = 12 - testAngles.Count;
                 Console.WriteLine($"Stimulus {stimulusNumber} of 12");
                 logger.LogReading($"Stimulus {stimulusNumber} - {currentAngle} - target");
-                Vector3D sourceVector = GeometryHelper.AngleToVector3D(GeometryHelper.DegToRad(currentAngle), 5f);
+                Vector3D sourceVector = GeometryHelper.AngleToVector3D(GeometryHelper.DegToRad(currentAngle+90), 5f);
                 _soundGenerator.SetAudioSourceLocation(sourceVector.X, sourceVector.Z);
                 _soundGenerator.Unmute();
                 trialActive = true;
@@ -73,6 +73,10 @@ namespace SpatialABFServer
             if (recentre)
             {
                 _soundGenerator.SetAudioSourceLocation(-data.X, -data.Z);
+                float yMagnitude = Math.Min(Math.Max(data.Y, 5f),10f);
+                float volume = (2f * (10f - yMagnitude))/10;
+                _soundGenerator.SetVolume(volume);
+
             }
             if (trialActive)
             {

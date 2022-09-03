@@ -36,14 +36,15 @@ namespace SpatialABFServer
                 int currentAngle = testAngles.Dequeue();
                 
 
-                Vector3D sourceVector = GeometryHelper.AngleToVector3D(GeometryHelper.DegToRad(currentAngle), 5f);
+                Vector3D sourceVector = GeometryHelper.AngleToVector3D(GeometryHelper.DegToRad(currentAngle+90), 10f);
 
                 _soundGenerator.SetAudioSourceLocation(sourceVector.X, sourceVector.Z);
                 _soundGenerator.Unmute();
+                Console.WriteLine($"Test angle {12 - testAngles.Count}");
                 Thread.Sleep(5000);
                 _soundGenerator.Mute();
 
-                Console.WriteLine($"Test angle {12 - testAngles.Count}: enter measured angle");
+                Console.WriteLine("Enter measured angle");
                 string measuredAngle = Console.ReadLine();
                 logger.LogReading($"{currentAngle},{measuredAngle}");
             }

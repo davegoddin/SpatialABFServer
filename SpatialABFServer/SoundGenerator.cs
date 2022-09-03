@@ -11,8 +11,8 @@ namespace SpatialABFServer
 {
     internal class SoundGenerator
     {
-        const string AUDIO_SOURCE_FILE = "D:/SpatialABF/SpatialABFServer/SpatialABFServer/Tone440.wav";
-        const float RADIUS = 0.3f;
+        const string AUDIO_SOURCE_FILE = "D:/SpatialABF/SpatialABFServer/SpatialABFServer/wideband-200-1200Hz.wav";
+        const float RADIUS = 1f;
 
         ISoundEngine engine = new ISoundEngine();
         ISound audio;
@@ -25,7 +25,7 @@ namespace SpatialABFServer
             audio = engine.Play3D(AUDIO_SOURCE_FILE, audioSourceLocation.X, audioSourceLocation.Y, audioSourceLocation.Z, true);
             // set listener to 0,0,0 and facing forward (0,0,1)
             engine.SetListenerPosition(new Vector3D(0, 0, 0), new Vector3D(0, 0, 1));
-            audio.MinDistance = 5f;
+            audio.MinDistance = 1f;
             Mute();
         }
 
@@ -58,6 +58,11 @@ namespace SpatialABFServer
         public void Stop()
         {
             audio.Stop();
+        }
+
+        public void SetVolume(float volume)
+        {
+            audio.Volume = volume;
         }
     }
 }
